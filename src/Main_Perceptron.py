@@ -4,12 +4,12 @@ import csv
 import math
 import random
 
-import Array_Operations as arrop
-
 INDEX_OF_PCT = lambda x, pct: int(round((len(x) * pct)))
 
+# Transformação das saídas.
 DATA_TYPES_MAP = { 'Iris-setosa': [0, 0, 1], 'Iris-versicolor': [0, 1, 0], 'Iris-virginica': [1, 0, 0] }
 
+# Leitura dos dados.
 def load_and_arrange_data():
     samples, labels, temp = [], [], []
 
@@ -23,11 +23,61 @@ def load_and_arrange_data():
         s, l = row[:(len(row) - 1)], row[(len(row) - 1):][0]
 
         samples.append([float(i) for i in s])
-        labels.append(DATA_TYPES_MAP[l])
+        labels.append(DATA_TYPES_MAP[l]) # Transformação atribuída.
 
     return samples, labels
 
-def step_func(x):
+# Operações para Arrays.
+def multiply(arr1, arr2):
+    result = 0
+
+    for i in range(len(arr1)):
+        result += arr1[i] * arr2[i]
+
+    return result
+
+def multiply_by_const(arr, const):
+    result = []
+
+    for element in arr:
+        result.append(element * const)
+
+    return result
+
+def add(arr1, arr2):
+    result = []
+
+    for i in range(len(arr1)):
+        result.append(arr1[i] + arr2[i])
+
+    return result
+
+def add_to_const(arr, const):
+    result = []
+
+    for element in arr:
+        result.append(element + const)
+
+    return result
+
+def sub(arr1, arr2):
+    result = []
+
+    for i in range(len(arr1)):
+        result.append(arr1[i] - arr2[i])
+
+    return result
+
+def sum_squared(arr):
+    result = 0
+
+    for element in arr:
+        result = element ** 2
+
+    return result
+
+# Função Degrau.
+def step_function(x):
     result = []
 
     for element in x:
@@ -35,14 +85,15 @@ def step_func(x):
 
     return result
 
-def sigmoid_func(x):
+# Função Sigmoidal.
+def sigmoid_function(x):
     result, temp = [], []
 
     h_index = 0
-    h_element = math.exp(x[h_index]) / (1 + math.exp(x[h_index]))
+    h_element = 1 / (1 + math.exp(x[h_index]))
 
     for i, element in enumerate(x):
-        new_element = math.exp(element) / (1 + math.exp(element))
+        new_element = 1 / (1 + math.exp(element))
 
         if new_element > h_element:
             h_index = i
@@ -55,6 +106,7 @@ def sigmoid_func(x):
 
     return result
 
+# Algoritmo Perceptron.
 def perceptron(alpha, samples, labels, activation_func, max_it=100):
     weights, bias = [0.1, 0.1, 0.1], [0.1, 0.1, 0.1]
 
@@ -70,20 +122,20 @@ def perceptron(alpha, samples, labels, activation_func, max_it=100):
         for i in range(len(s_train)):
             x, d = s_train[i], l_train[i]
 
-            y = activation_func(arrop.add_to_const(bias, arrop.multiply(weights, x)))
-            error = arrop.sub(d, y)
-            weights = arrop.add_to_const(weights, alpha * arrop.multiply(error, x))
-            bias = arrop.add(bias, arrop.multiply_by_const(error, alpha))
+            y = activation_func(add_to_const(bias, multiply(weights, x)))
+            error = sub(d, y)
+            weights = add_to_const(weights, alpha * multiply(error, x))
+            bias = add(bias, multiply_by_const(error, alpha))
 
-            E = E + arrop.sum_squared(error)
+            E = E + sum_squared(error)
 
         it = it + 1
 
     for i in range(len(s_test)):
         x, d = s_test[i], l_test[i]
 
-        y = activation_func(arrop.add_to_const(bias, arrop.multiply(weights, x)))
-        error = arrop.sub(d, y)
+        y = activation_func(add_to_const(bias, multiply(weights, x)))
+        error = sub(d, y)
 
         hits += 1 if error.count(1) == 0 else 0 # Check if error only contains zeros.
 
@@ -93,9 +145,12 @@ def perceptron(alpha, samples, labels, activation_func, max_it=100):
 
 def main():
     samples, labels = load_and_arrange_data()
-
-    print('[STEP FUNCTION] : ACURACY =>', perceptron(0.1, samples, labels, step_func))
-    print('[SIGMOID FUNCTION] : ACURACY =>', perceptron(0.1, samples, labels, sigmoid_func))
+    
+    print('-------------------------------------------------------')
+    print('TAXA DE ACERTO PARA AMBAS AS FUNÇÕES:')
+    print('TAXA DE ACERTO P/ FUNÇÃO DEGRAU:', perceptron(0.1, samples, labels, step_function))
+    print('TAXA DE ACERTO P/ FUNÇÃO SIGMOIDAL:', perceptron(0.1, samples, labels, sigmoid_function))
+    print('-------------------------------------------------------')
 
 if __name__ == "__main__":
     main()
