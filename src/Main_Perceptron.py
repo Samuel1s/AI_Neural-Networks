@@ -1,4 +1,14 @@
-# Neural Network, Perceptron analysis.
+#*******************************************************************************
+#*                      Redes Neurais-Algoritmo Perceptron                     *
+#*-----------------------------------------------------------------------------*
+#* @AUTHOR: Samuel Filipe dos Santos e Giulio Castro                           *
+#* @TEACHER: Rogério Martins Gomes.                                            *
+#* @LANGUAGE: Python                                                           *
+#* @DISCIPLINE: Inteligência Artificial                                        *
+#* @CODING: UTF-8                                                              *
+#* @DATE: 07 de março de 2021                                                  *
+#*******************************************************************************
+
 
 import csv
 import math
@@ -16,8 +26,6 @@ def load_and_arrange_data():
     with open('iris.data', newline='') as csvfile:
         for row in csv.reader(csvfile, delimiter=','):
             temp.append(row)
-
-    # random.shuffle(temp) # Shuffle data in random order.
 
     for row in temp:
         s, l = row[:(len(row) - 1)], row[(len(row) - 1):][0]

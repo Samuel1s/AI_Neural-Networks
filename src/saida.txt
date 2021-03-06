@@ -1,0 +1,5 @@
+-------------------------------------------------------
+TAXA DE ACERTO PARA AMBAS AS FUNÇÕES:
+TAXA DE ACERTO P/ FUNÇÃO DEGRAU: 52.38095238095239
+TAXA DE ACERTO P/ FUNÇÃO SIGMOIDAL: 47.61904761904761
+-------------------------------------------------------
